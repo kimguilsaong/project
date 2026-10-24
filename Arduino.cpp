@@ -11,21 +11,38 @@
 
 #define GREEN 5
 
+int led[4] = {LED1, LED2, LED3, LED4};
+
 int startvalue1 = 0;
 int motorvalue2 = 0;
 
-unsigned long time = 0;
+void buzzerSound(int frequency, int duration) {
+
+  tone(BUZZER, frequency);
+
+  unsigned long time = millis();
+
+  while (millis() - time < duration) {
+  }
+
+  noTone(BUZZER);
+}
+
+int checkButton(int pin) {
+
+  int value = digitalRead(pin);
+
+  return value;
+}
 
 void setup() {
 
   pinMode(BUTTON, INPUT);
   pinMode(MOTOR_BUTTON, INPUT);
 
-  for (int i = 6; i <= 8; i++) {
-    pinMode(i, OUTPUT);
+  for (int i = 0; i < 4; i++) {
+    pinMode(led[i], OUTPUT);
   }
-
-  pinMode(LED4, OUTPUT);
 
   pinMode(MOTOR, OUTPUT);
   pinMode(BUZZER, OUTPUT);
@@ -35,8 +52,8 @@ void setup() {
 
 void loop() {
 
-  startvalue1 = digitalRead(BUTTON);
-  motorvalue2 = digitalRead(MOTOR_BUTTON);
+  startvalue1 = checkButton(BUTTON);
+  motorvalue2 = checkButton(MOTOR_BUTTON);
 
   switch (motorvalue2) {
 
@@ -55,52 +72,39 @@ void loop() {
 
   if (startvalue1 == 0) {
 
-    digitalWrite(LED1, HIGH);
+    digitalWrite(led[0], HIGH);
 
-    tone(BUZZER, 700);
-    delay(150);
-    noTone(BUZZER);
+    buzzerSound(700, 150);
 
     delay(350);
 
-    digitalWrite(LED2, HIGH);
+    digitalWrite(led[1], HIGH);
 
     delay(500);
 
-    digitalWrite(LED3, HIGH);
+    digitalWrite(led[2], HIGH);
 
-    tone(BUZZER, 700);
-    delay(150);
-    noTone(BUZZER);
+    buzzerSound(700, 150);
 
     delay(350);
 
-    digitalWrite(LED4, HIGH);
+    digitalWrite(led[3], HIGH);
 
     delay(500);
 
-    tone(BUZZER, 700);
-    delay(150);
-    noTone(BUZZER);
+    buzzerSound(700, 150);
 
     delay(850);
 
-    for (int i = 6; i <= 8; i++) {
-      digitalWrite(i, LOW);
+    for (int i = 0; i < 4; i++) {
+      digitalWrite(led[i], LOW);
     }
-
-    digitalWrite(LED4, LOW);
 
     digitalWrite(GREEN, HIGH);
 
-    tone(BUZZER, 1400);
-    delay(500);
-    noTone(BUZZER);
+    buzzerSound(1400, 500);
 
-    time = millis();
-
-    while (millis() - time < 2000) {
-    }
+    delay(2000);
 
     digitalWrite(GREEN, LOW);
 
